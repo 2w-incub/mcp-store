@@ -3,6 +3,7 @@
 -- 1. Clerk Authentication integration
 -- 2. Stripe subscription management
 -- 3. Required database policies and permissions
+-- 4. MCP server management
 
 create type "public"."pricing_plan_interval" as enum ('day', 'week', 'month', 'year');
 
@@ -358,6 +359,163 @@ as permissive
 for select
 to public
 using ((requesting_user_id() = user_id));
+
+-- MCP Server Management Tables
+
+-- Servers Table
+create table "public"."servers" (
+    "id" uuid not null default uuid_generate_v4(),
+    "name" varchar(200) not null,
+    "description" text,
+    "version_history" text,
+    "compatibility" jsonb,
+    "release_notes" text,
+    "screenshots" text[],
+    "developer_info" jsonb,
+    "license" varchar(100),
+    "created_at" timestamp with time zone not null default timezone('utc'::text, now()),
+    "updated_at" timestamp with time zone not null default timezone('utc'::text, now())
+);
+
+alter table "public"."servers" enable row level security;
+
+CREATE UNIQUE INDEX servers_pkey ON public.servers USING btree (id);
+alter table "public"."servers" add constraint "servers_pkey" PRIMARY KEY using index "servers_pkey";
+
+-- Reviews Table
+create table "public"."reviews" (
+    "id" uuid not null default uuid_generate_v4(),
+    "user_id" text not null,
+    "server_id" uuid not null,
+    "rating" integer CHECK (rating BETWEEN 1 AND 5),
+    "comment" text,
+    "created_at" timestamp with time zone not null default timezone('utc'::text, now())
+);
+
+alter table "public"."reviews" enable row level security;
+
+CREATE UNIQUE INDEX reviews_pkey ON public.reviews USING btree (id);
+alter table "public"."reviews" add constraint "reviews_pkey" PRIMARY KEY using index "reviews_pkey";
+alter table "public"."reviews" add constraint "reviews_server_id_fkey" FOREIGN KEY (server_id) REFERENCES servers(id) not valid;
+alter table "public"."reviews" validate constraint "reviews_server_id_fkey";
+
+-- Installation Logs Table
+create table "public"."installation_logs" (
+    "id" uuid not null default uuid_generate_v4(),
+    "user_id" text,
+    "server_id" uuid not null,
+    "status" varchar(50),
+    "error_message" text,
+    "attempted_at" timestamp with time zone not null default timezone('utc'::text, now())
+);
+
+alter table "public"."installation_logs" enable row level security;
+
+CREATE UNIQUE INDEX installation_logs_pkey ON public.installation_logs USING btree (id);
+alter table "public"."installation_logs" add constraint "installation_logs_pkey" PRIMARY KEY using index "installation_logs_pkey";
+alter table "public"."installation_logs" add constraint "installation_logs_server_id_fkey" FOREIGN KEY (server_id) REFERENCES servers(id) not valid;
+alter table "public"."installation_logs" validate constraint "installation_logs_server_id_fkey";
+
+-- Analytics Table
+create table "public"."analytics" (
+    "id" uuid not null default uuid_generate_v4(),
+    "user_id" text,
+    "user_action" varchar(100),
+    "details" jsonb,
+    "recorded_at" timestamp with time zone not null default timezone('utc'::text, now())
+);
+
+alter table "public"."analytics" enable row level security;
+
+CREATE UNIQUE INDEX analytics_pkey ON public.analytics USING btree (id);
+alter table "public"."analytics" add constraint "analytics_pkey" PRIMARY KEY using index "analytics_pkey";
+
+-- User Favorites Table
+create table "public"."user_favorites" (
+    "id" uuid not null default uuid_generate_v4(),
+    "user_id" text not null,
+    "server_id" uuid not null,
+    "added_at" timestamp with time zone not null default timezone('utc'::text, now())
+);
+
+alter table "public"."user_favorites" enable row level security;
+
+CREATE UNIQUE INDEX user_favorites_pkey ON public.user_favorites USING btree (id);
+alter table "public"."user_favorites" add constraint "user_favorites_pkey" PRIMARY KEY using index "user_favorites_pkey";
+alter table "public"."user_favorites" add constraint "user_favorites_server_id_fkey" FOREIGN KEY (server_id) REFERENCES servers(id) not valid;
+alter table "public"."user_favorites" validate constraint "user_favorites_server_id_fkey";
+
+-- Permissions for MCP Tables
+grant select on table "public"."servers" to "anon";
+grant select on table "public"."servers" to "authenticated";
+grant all on table "public"."servers" to "service_role";
+
+grant select on table "public"."reviews" to "anon";
+grant all on table "public"."reviews" to "authenticated";
+grant all on table "public"."reviews" to "service_role";
+
+grant select on table "public"."installation_logs" to "authenticated";
+grant insert on table "public"."installation_logs" to "authenticated";
+grant all on table "public"."installation_logs" to "service_role";
+
+grant insert on table "public"."analytics" to "anon";
+grant insert on table "public"."analytics" to "authenticated";
+grant all on table "public"."analytics" to "service_role";
+
+grant select on table "public"."user_favorites" to "authenticated";
+grant insert, delete on table "public"."user_favorites" to "authenticated";
+grant all on table "public"."user_favorites" to "service_role";
+
+-- RLS Policies
+-- Servers: Everyone can read
+CREATE POLICY "Enable read access for all users" ON "public"."servers"
+AS PERMISSIVE FOR SELECT
+TO public
+USING (true);
+
+-- Reviews: Everyone can read, authenticated users can create their own
+CREATE POLICY "Enable read access for all users" ON "public"."reviews"
+AS PERMISSIVE FOR SELECT
+TO public
+USING (true);
+
+CREATE POLICY "Enable insert for authenticated users only" ON "public"."reviews"
+AS PERMISSIVE FOR INSERT
+TO authenticated
+WITH CHECK (auth.uid() = user_id);
+
+-- Installation Logs: Users can read and create their own logs
+CREATE POLICY "Enable read for user's own logs" ON "public"."installation_logs"
+AS PERMISSIVE FOR SELECT
+TO authenticated
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Enable insert for authenticated users" ON "public"."installation_logs"
+AS PERMISSIVE FOR INSERT
+TO authenticated
+WITH CHECK (auth.uid() = user_id);
+
+-- Analytics: Anyone can insert
+CREATE POLICY "Enable insert for all users" ON "public"."analytics"
+AS PERMISSIVE FOR INSERT
+TO public
+WITH CHECK (true);
+
+-- User Favorites: Users can manage their own favorites
+CREATE POLICY "Enable read for user's own favorites" ON "public"."user_favorites"
+AS PERMISSIVE FOR SELECT
+TO authenticated
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Enable insert for authenticated users" ON "public"."user_favorites"
+AS PERMISSIVE FOR INSERT
+TO authenticated
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Enable delete for user's own favorites" ON "public"."user_favorites"
+AS PERMISSIVE FOR DELETE
+TO authenticated
+USING (auth.uid() = user_id);
 
 
 

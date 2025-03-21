@@ -1,0 +1,131 @@
+{
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:3000",
+    "distDir": "../out",
+    "envPrefix": [
+      "NEXT_PUBLIC_",
+      "CLERK_",
+      "OPENAI_",
+      "SUPABASE_"
+    ]
+  },
+  "package": {
+    "productName": "MCP Server Store",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "fs": {
+        "all": true,
+        "scope": [
+          "$APP/*",
+          "$APPCONFIG/*",
+          "$HOME/.mcp-store/*"
+        ]
+      },
+      "path": {
+        "all": true
+      },
+      "shell": {
+        "all": false,
+        "execute": true,
+        "open": true,
+        "sidecar": false,
+        "scope": [
+          {
+            "name": "install-mcp-server",
+            "cmd": "sh",
+            "args": [
+              "-c",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          }
+        ]
+      },
+      "dialog": {
+        "all": true,
+        "ask": true,
+        "confirm": true,
+        "message": true,
+        "open": true,
+        "save": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": [
+          "https://api.openai.com/v1/*",
+          "https://**/*supabase.co/*",
+          "https://**/*clerk.dev/*"
+        ]
+      },
+      "notification": {
+        "all": true
+      },
+      "os": {
+        "all": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "© 2024",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.mcp-store.dev",
+      "longDescription": "A desktop application to simplify the discovery and installation of MCP servers.",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "MCP Server Store",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": "default-src 'self'; connect-src 'self' https://*.supabase.co https://*.clerk.dev https://api.openai.com; img-src 'self' data: https://*; style-src 'self' 'unsafe-inline'"
+    },
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://releases.mcp-store.com/releases/{{target}}/{{arch}}/{{current_version}}"
+      ],
+      "dialog": true,
+      "pubkey": ""
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 800,
+        "resizable": true,
+        "title": "MCP Server Store",
+        "width": 1200,
+        "minWidth": 800,
+        "minHeight": 600,
+        "center": true
+      }
+    ]
+  }
+}

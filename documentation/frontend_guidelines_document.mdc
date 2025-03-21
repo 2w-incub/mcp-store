@@ -1,0 +1,108 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Frontend Guideline Document
+
+This document outlines the frontend architecture, design principles, and technologies used in our MCP server discovery and installation desktop application. Anyone reading this document will understand how the frontend is set up, what decisions were made, and how the project will maintain quality, scalability, and performance.
+
+## 1. Frontend Architecture
+
+Our frontend is built using a modern web stack that ensures both scalability and maintainability. The key components include:
+
+*   **Tauri:** This framework lets us build cross-platform desktop applications. It packages our web-based frontend into a lightweight desktop app compatible with Windows, macOS, and Linux.
+*   **Next.js:** As a React framework, Next.js allows us to leverage server-side rendering, static site generation, and fast client-side navigation. It simplifies routing and improves performance.
+*   **Typescript:** We use Typescript to catch errors early and produce clean, maintainable code.
+*   **Shadcn UI:** This pre-built UI component library helps keep our design consistent throughout the application.
+
+The architecture supports scalability by separating concerns clearly into components, pages, and services, and maintainability by using type safety and a component-based design. Performance is enhanced with Next.js optimizations such as code splitting and lazy-loading of assets, and by leveraging Tauri’s native capabilities for desktop environments.
+
+## 2. Design Principles
+
+Our design principles ensure that the application is usable, accessible, and responsive. These principles guide every decision:
+
+*   **Usability:** The interface is intuitive and simple to use, catering to both technical and non-technical users. Features like server discovery, search, and one-click installation are designed to be straightforward.
+*   **Accessibility:** We pay close attention to accessibility guidelines, ensuring that users with disabilities or differing levels of experience can navigate and use the application efficiently.
+*   **Responsiveness:** Our design adapts across different screen sizes and resolutions. This is vital not only for the cross-platform desktop experience but also for future-proofing on various devices.
+
+Every user interface component is built with clear labelling, proper contrast, and logical navigation to enhance user experience.
+
+## 3. Styling and Theming
+
+The visual appearance of our application is formed by a clean, modern design approach:
+
+*   **Styling Approach:** We use Tailwind CSS to style our application. Tailwind’s utility-first approach lets us build custom designs quickly while ensuring consistency. Our styling is organized using modern CSS methodologies that encourage reusability of styles.
+
+*   **Theming:** The design is built on a slate color background, which creates a neutral base. We use sparing purple accents as our primary brand color to draw attention to key actions and important UI elements. This blend offers a modern, visually appealing look.
+
+*   **Design Style:** The overall design is modern and flat, with touches of material design for interactive elements. There is an emphasis on clarity, minimalism, and user focus.
+
+*   **Color Palette:**
+
+    *   Base: Tailwind's slate color
+    *   Accent: Purple-ish primary brand color
+    *   Additional colors may be added for warnings, success messages, and information prompts, ensuring consistency across the app.
+
+*   **Typography:** The default font for our application is Inter, offering a clean and modern look that aligns with our design principles.
+
+## 4. Component Structure
+
+We adhere to a component-based architecture that ensures our UI elements are modular and reusable:
+
+*   **Organization:** Components are organized into directories based on functionality (e.g., form components, navigation, card elements, etc.). This modular approach makes the development process clearer and maintains a single responsibility for each component.
+*   **Reuse and Maintenance:** By modularizing components, we reduce code duplication, simplify maintenance, and enable easy testing and scalability. Reusable components can be updated centrally and propagate changes across the entire application.
+
+## 5. State Management
+
+Effective state management is critical to providing a smooth and consistent user experience. In our project, we manage state using:
+
+*   **React’s Built-in State Handling:** For local component states, React hooks are used.
+*   **Context API (or similar):** For shared state that multiple components need, we use a centralized store via React Context to handle global states like user data and server lists.
+
+This approach ensures that all components have access to up-to-date state information without excessive prop drilling, thereby simplifying debugging and feature enhancements.
+
+## 6. Routing and Navigation
+
+Navigation within the application is streamlined using Next.js routing capabilities:
+
+*   **Routing:** Next.js’ file-based routing handles navigation effortlessly. Each page in the application is represented by a React component in the pages directory.
+*   **Navigation Structure:** The user flow starts at a home screen or landing page and progresses to server discovery, server details, and installation processes. Clear navigation links and breadcrumbs guide users through the application, ensuring they always understand where they are and how to move between sections.
+
+## 7. Performance Optimization
+
+Performance is a key component of our user experience strategy. We implement several techniques to ensure the app remains fast and responsive:
+
+*   **Lazy Loading:** Components and resources are loaded on demand rather than all at once, reducing initial load time.
+*   **Code Splitting:** Next.js’ built-in support splits code into smaller chunks, which are loaded as needed.
+*   **Asset Optimization:** Images and other assets are optimized for fast loading.
+*   **Desktop-specific Optimizations:** Tauri enhances performance through native integration, resulting in faster runtime interactions.
+
+These performance enhancements help in reducing latency and improving the overall responsiveness of the application.
+
+## 8. Testing and Quality Assurance
+
+To maintain a high standard of quality, our frontend undergoes rigorous testing:
+
+*   **Unit Tests:** We use testing libraries like Jest and React Testing Library to test individual components and functions.
+*   **Integration Tests:** These tests ensure components work well together, mimicking real user interactions.
+*   **End-to-End Tests:** Tools such as Cypress are employed to validate critical user workflows from start to finish.
+
+Regular testing helps catch issues early, ensures reliability, and streamlines the process of introducing new features or refactoring code.
+
+## 9. Conclusion and Overall Frontend Summary
+
+To sum up, our frontend is designed to deliver a seamless, modern, and accessible experience that aligns with both technical requirements and user needs. We use a robust and scalable architecture (leveraging Tauri, Next.js, and Typescript) coupled with a component-based design that promotes code reuse and maintainability.
+
+Key aspects include:
+
+*   A modern setup with cross-platform desktop capabilities.
+*   A clear, accessible, and responsive design following clean design principles.
+*   A consistent look and feel due to Tailwind CSS, a slate and purple color palette, and Inter font.
+*   State management patterns that provide a smooth user experience.
+*   Optimized performance through lazy loading, code splitting, and asset optimization.
+*   Comprehensive testing and quality assurance, ensuring the product is reliable.
+
+These guidelines ensure that our project stands out by being user-centric, efficient, and sustainably developed, addressing both the technical demands of modern desktop applications and the needs of our diverse user base.

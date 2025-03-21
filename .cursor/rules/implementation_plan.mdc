@@ -1,0 +1,73 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Implementation plan
+
+## Phase 1: Environment Setup
+
+1.  **Step 1:** Create a new project directory named `mcp-desktop-app` and initialize a Git repository using the CodeGuide Starter Pro Repo (Repository: <https://github.com/codeGuide-dev/codeguide-starter-pro>). *(Starter Kit)*
+2.  **Step 2:** Clone the starter kit into your project directory by running `git clone https://github.com/codeGuide-dev/codeguide-starter-pro.git .` *(Starter Kit)*
+3.  **Step 3:** Verify that Node.js is installed by running `node -v`. If not installed, install Node.js v20.2.1 to ensure compatibility. *(Tech Stack: Core Tools)*
+4.  **Step 4:** Install the Next.js 14 framework (explicitly use Next.js 14 instead of the latest version for better integration with AI coding tools). Update your package.json to reference Next.js 14. *(Tech Stack: Frontend)
+5.  **Step 5:** Set up the Tauri environment by installing the Tauri CLI globally using `cargo install tauri-cli` and configuring necessary prerequisites for Windows, macOS, and Linux. *(Tech Stack: Frontend & Tauri)
+6.  **Step 6:** Install project dependencies including Typescript, Tailwind CSS (configured with a slate base and purple accents), and Shadcn UI by running `npm install` in the project root. *(Tech Stack: Frontend)
+7.  **Step 7:** **Validation:** Run `npm run dev` to confirm that the Next.js development server starts without errors.
+
+## Phase 2: Frontend Development
+
+1.  **Step 8:** Create the Home Screen component in `/src/pages/index.tsx` that displays featured servers, latest additions, and personalized AI recommendations. Use Tailwind CSS (with slate base, purple accents, and Inter font) along with Shadcn UI components. *(Design Preferences, Core Features: Server Discovery, AI Recommendations)*
+2.  **Step 9:** **Validation:** Launch the Home Screen in the browser and verify that the layout matches design preferences.
+3.  **Step 10:** Create the Search and Discovery page in `/src/pages/search.tsx` with UI elements for advanced search, filtering, and category browsing of MCP servers. *(Core Features: Server Discovery)*
+4.  **Step 11:** **Validation:** Navigate to the Search page in the browser to ensure filters and search inputs are displayed correctly.
+5.  **Step 12:** Develop the Server Details page in `/src/pages/server/[id].tsx` to show comprehensive server information including description, version history, compatibility, reviews, usage metrics, screenshots, developer info, and license data. *(Core Features: Server Details)
+6.  **Step 13:** **Validation:** Simulate navigation to a server detail view with dummy data to check proper rendering.
+7.  **Step 14:** Build the Installation Manager page in `/src/pages/install.tsx` that enables one-click server installation with appropriate error messages and retry mechanisms in the UI. *(Core Features: One-Click Installation, Error Handling)
+8.  **Step 15:** **Validation:** Trigger a simulated installation flow and ensure status messages and error feedback operate as expected.
+9.  **Step 16:** Set up User Authentication pages by creating `/src/pages/login.tsx` and `/src/pages/signup.tsx`, integrating Clerk Auth for account creation and login while keeping the app usable without signing in. *(Core Features: User Authentication)*
+10. **Step 17:** **Validation:** Test the login/signup flows using Clerk Auth test mode to confirm proper authentication behavior.
+11. **Step 18:** Integrate privacy-focused analytics by adding the Plausible or Matomo tracking script into `/src/pages/_app.tsx` to monitor user interactions. *(Analytics)*
+12. **Step 19:** **Validation:** Open the browser’s developer tools to verify the analytics script is loading on all pages.
+
+## Phase 3: Backend Development
+
+1.  **Step 20:** Set up a Supabase project and create database tables for storing MCP server data and user preferences. Document table schemas in your project documentation. *(Tech Stack: Supabase, Data Handling)
+2.  **Step 21:** **Validation:** Use Supabase Studio to verify that the required tables are created and accessible.
+3.  **Step 22:** Create a GET API endpoint at `/src/pages/api/servers/index.ts` that retrieves a list of MCP servers from Supabase. *(Core Features: Server Discovery)
+4.  **Step 23:** Create a GET API endpoint at `/src/pages/api/servers/[id].ts` which returns detailed information for a specific server based on its ID. *(Core Features: Server Details)
+5.  **Step 24:** **Validation:** Test both endpoints using Postman or curl commands to ensure they return the correct JSON data.
+6.  **Step 25:** Develop a POST API endpoint at `/src/pages/api/install.ts` to handle one-click server installations. Include built-in error handling, retry mechanisms (e.g., three attempts with delays), and logging for installation failures. *(Core Features: One-Click Installation, Error Handling)
+7.  **Step 26:** **Validation:** Use curl to POST to this endpoint and verify that proper responses and error logs are generated during simulated failure conditions.
+8.  **Step 27:** Implement an AI Recommendations endpoint at `/src/pages/api/recommendations.ts` that integrates with GPT-4o or Claude 3.5 Sonnet to analyze user behavior and return personalized MCP server suggestions. *(Core Features: AI Recommendations)
+9.  **Step 28:** **Validation:** Simulate an API call to the recommendations endpoint and verify that sample recommendations are returned.
+
+## Phase 4: Integration
+
+1.  **Step 29:** Connect the Search and Discovery page in the frontend to the GET `/api/servers` endpoint using fetch or Axios calls from a utility module (e.g., `/src/utils/api.ts`). *(App Structure: Search and Discovery)
+2.  **Step 30:** **Validation:** Confirm that the server list populates dynamically on the Search page using dummy or live data.
+3.  **Step 31:** Integrate the Server Details page with the GET `/api/servers/[id]` API endpoint, ensuring that data is fetched based on the server ID provided in the URL. *(App Structure: Server Details)
+4.  **Step 32:** **Validation:** Navigate to a sample server detail view and verify that all server information loads correctly.
+5.  **Step 33:** Connect the Installation Manager page to the POST `/api/install` endpoint so that clicking the install button initiates the one-click installation process. *(App Structure: Installation Manager)
+6.  **Step 34:** **Validation:** Simulate the installation flow from the UI to verify that installation status and error recovery mechanisms work properly.
+7.  **Step 35:** Integrate Clerk Auth with frontend authentication forms, ensuring secure sign-in, sign-up, and session management. *(Core Features: User Authentication)
+8.  **Step 36:** **Validation:** Test user authentication flows to confirm that login/logout and session persistence are operating as intended.
+9.  **Step 37:** Integrate AI-powered recommendations by calling the GET `/api/recommendations` endpoint from the Home Screen and displaying interactive suggestions. *(App Structure: Home Screen, AI Recommendations)
+10. **Step 38:** **Validation:** Verify that personalized server recommendations appear on the Home Screen based on simulated user behavior.
+11. **Step 39:** Implement client- and server-side error handling throughout the application. Ensure that retry logic is in place for failed installation actions and that detailed error messages are communicated to the user. *(Core Features: Error Handling, Fallbacks)
+12. **Step 40:** **Validation:** Simulate errors in the installation flow to ensure that retries and logging occur as designed.
+
+## Phase 5: Deployment
+
+1.  **Step 41:** Configure Tauri by creating and editing the `tauri.conf.json` file in the project root with appropriate settings to support cross-platform desktop builds. *(Tech Stack: Tauri)
+2.  **Step 42:** **Validation:** Run the Tauri build command (`tauri build`) to generate desktop application binaries for your development OS.
+3.  **Step 43:** Set up environment variables for Supabase and Clerk Auth in an `.env` file at the root of the project, ensuring secure handling of keys and credentials. *(Data Handling, Tech Stack: Supabase, Clerk Auth)
+4.  **Step 44:** **Validation:** Confirm that local development connects successfully to Supabase and Clerk by testing authentication and data retrieval.
+5.  **Step 45:** Configure a CI/CD pipeline using GitHub Actions to build both the Next.js frontend and Tauri package automatically upon new commits. *(Deployment)
+6.  **Step 46:** **Validation:** Manually trigger the pipeline and review build logs to verify successful builds and artifact generation.
+7.  **Step 47:** Integrate the privacy-focused analytics (Plausible/Matomo) configuration into the production build through environment-specific settings. *(Analytics)
+8.  **Step 48:** **Validation:** Deploy the staging version of the app and use network tools to confirm that the analytics scripts are active.
+9.  **Step 49:** Publish the desktop application by following Tauri’s release process; update release notes and versioning in project documentation to reflect the deployment.
+10. **Step 50:** **Validation:** Conduct a final user walkthrough by installing and testing the application on Windows, macOS, and Linux, and verify that error handling, support/feedback links (documented in `/docs/Support.md`), and all core features are fully operational.

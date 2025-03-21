@@ -1,0 +1,114 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Project Requirements Document
+
+## 1. Project Overview
+
+This desktop application is designed to simplify the discovery and installation process for MCP (Model Context Protocol) servers by offering an intuitive, one-click solution. It aims to eliminate the traditional hassles of manually editing configuration files or using command line instructions, making it accessible to both technical and non-technical users. Users can browse through a curated list of MCP servers, view detailed server information, and install them directly into their preferred MCP client (such as Claude Desktop or Cursor) seamlessly.
+
+The application is being built to streamline how users explore and enhance specific AI capabilities provided by MCP servers. Key objectives include ensuring a smooth and robust user experience, enabling personalized server recommendations through advanced AI integration (using GPT-4o or Claude 3.5 Sonnet), and making the installation process so simple that even users with minimal technical expertise can benefit. Success will be measured by user engagement, ease of server installation, and a significant reduction in support requests due to improved error handling and intuitive navigation.
+
+## 2. In-Scope vs. Out-of-Scope
+
+**In-Scope:**
+
+*   Desktop cross-platform support for Windows, macOS, and potentially Linux.
+*   User-friendly home screen showing featured servers, latest additions, and personalized recommendations.
+*   Comprehensive server discovery via categorized browsing and advanced search functionality.
+*   Detailed Server Details page displaying server descriptions, version history, compatibility notes, user reviews and ratings, installation requirements, visual media, usage metrics, and developer information.
+*   One-click installation process that automatically integrates selected MCP servers into user-defined MCP clients.
+*   Optional user account management and authentication using Clerk for syncing preferences and managing favorites.
+*   AI-powered server recommendations based on user interactions, browsing history, and preferences using GPT-4o or Claude 3.5 Sonnet.
+*   Robust error handling during installation failures and connectivity issues, including detailed error messaging, retry mechanisms, and logging.
+*   Privacy-focused analytics tooling (e.g., Plausible or Matomo) to track usage patterns for continuous improvement.
+*   Clean, modern UI design based on Tailwind’s slate color scheme with accents of purple and the Inter font for consistency.
+
+**Out-of-Scope:**
+
+*   A real-time or scheduled notification system (notifications are not required).
+*   Role-based permissions or multi-tiered user access levels.
+*   Automated MCP server sourcing via external APIs (server list will be managed manually).
+*   Any extensive backend heavy integrations not related to the core functionality.
+*   Advanced customization of AI recommendation settings beyond the basic interactive feedback loop.
+
+## 3. User Flow
+
+When a user launches the application, they are greeted by a clean and modern home screen that highlights featured MCP servers, the latest additions, and personalized recommendations tailored to their interests. Even if they are not signed in, users can browse through various categories of servers, enjoy an intuitive interface with clear navigation cues, and quickly find a server that matches their needs.
+
+For users who decide to sign up with Clerk for account synchronization, the experience extends to include account creation and sign-in. Once authenticated, users can save favorite servers, sync installations across multiple devices, and see personalized insights based on their activity. The typical journey involves browsing, selecting a server to view detailed information, and then clicking a one-click installation button that triggers an automated integration with their MCP client. In case of errors during installation, detailed error messages help guide the user through troubleshooting.
+
+## 4. Core Features
+
+*   **Server Discovery Browser:**\
+    • Intuitive browsing experience with categorized servers for easy exploration.\
+    • Dynamic filtering and advanced search based on keywords, compatibility, and other criteria.
+*   **Server Details Page:**\
+    • Comprehensive view including server name, description, version history, compatibility notes, usage metrics, visual media (screenshots and videos), user reviews/ratings, installation requirements, developer profiles, and licensing details.
+*   **One-Click Installation:**\
+    • Seamless integration process that automatically configures MCP servers into user-defined MCP clients (e.g., Claude Desktop or Cursor).\
+    • Built-in error handling with detailed error messages, retry mechanisms, and logging in case of failures.
+*   **User Account Management (Optional):**\
+    • Use Clerk for sign-up, sign-in, and account management.\
+    • Features like syncing favorites and installations across devices available only after authentication.
+*   **AI-Powered Recommendations:**\
+    • Integration with GPT-4o or Claude 3.5 Sonnet to analyze user behavior and provide personalized MCP server recommendations.\
+    • Interactive suggestions that adapt based on user feedback and browsing history.
+*   **Analytics Integration:**\
+    • Privacy-focused analytics tool (e.g., Plausible or Matomo) to track user interactions and feature usage for continuous improvement.
+
+## 5. Tech Stack & Tools
+
+*   **Frontend:**\
+    • Tauri – for building a cross-platform desktop application.\
+    • Next.js, Tailwind CSS, and Typescript – for a dependable, modern, and well-structured front-end experience.\
+    • Shadcn UI components for a consistent and clean design guided by Tailwind’s slate color with purple accents.
+*   **Backend:**\
+    • Supabase – used as the backend database for storing MCP server data and user information.\
+    • Clerk – for user authentication and account management.
+*   **AI Integration:**\
+    • GPT-4o or Claude 3.5 Sonnet – to analyze user interactions and drive personalized server recommendations, ensuring the recommendation engine is adaptive and interactive.
+*   **Development Tools & IDE Integrations:**\
+    • Cursor – an advanced IDE that provides real-time suggestions to speed up coding and implementation.\
+    • Relevant plugins within the IDE for code linting and formatting.
+*   **Analytics:**\
+    • Plausible or Matomo – for privacy-focused tracking of user interactions and analyzing usage patterns.
+
+## 6. Non-Functional Requirements
+
+*   **Performance:**\
+    • The application should load quickly with minimal delay, aiming for response times under 2 seconds for key interactions like server search and installation.
+*   **Security:**\
+    • Enforcement of secure data handling especially during user authentication, account syncing, and installation processes.\
+    • Ensure proper encryption of user credentials and secure management of MCP server integration details.
+*   **Compliance:**\
+    • Adherence to industry best practices for data privacy, especially when integrating analytics.
+*   **Usability:**\
+    • The UI should be intuitive and friendly to both technical and non-technical users with clear navigation and minimal learning curve.
+
+## 7. Constraints & Assumptions
+
+*   The app assumes that users have a basic understanding of what MCP servers are, even though the installation and user guidance simplify the process.
+*   Availability of AI models (GPT-4o or Claude 3.5 Sonnet) is presumed for powering the intelligent recommendation system.
+*   The MCP server list is maintained manually in the app database, so automated API fetching is not implanted in the initial release.
+*   It is assumed that users who choose not to sign in will still have access to all core functionalities except for those that require syncing or personalized settings.
+*   The current design targets a clean modern UI with Tailwind’s slate color palette and purple accents, and follows the design principles outlined in the project outline.
+
+## 8. Known Issues & Potential Pitfalls
+
+*   **API Rate Limits/Connectivity:**\
+    • If the installation process involves connecting to external MCP clients intermittently, there might be rate limits or connectivity issues. Use retry mechanisms and log detailed error information to troubleshoot these issues.
+*   **Error Handling Complexity:**\
+    • Manual configuration efforts in one-click installations could lead to unforeseen errors. Ensure pre-deployment testing and robust error messaging are in place so users know how to resolve issues, along with a feedback support channel.
+*   **AI Recommendations Accuracy:**\
+    • The personalized recommendation system might initially provide less accurate suggestions if user data is limited. Allow users to provide feedback to help the AI improve, and regularly fine-tune the recommendation algorithms.
+*   **Cross-Platform Consistency:**\
+    • Ensuring that the app works seamlessly across Windows, macOS, and Linux may introduce discrepancies in UI or system integration. Test extensively on all targeted operating systems.
+*   **User Data Synchronization:**\
+    • Potential challenges with syncing favorites and preferences across devices, especially when users are offline temporarily. Implement a robust sync protocol with error correction and fallback mechanisms.
+
+This document serves as the clear and thorough reference for building the application from a project requirements perspective. It encompasses every detail needed for subsequent technical documents and ensures that any AI-driven creation of further guidelines (tech stack, frontend, backend, etc.) is based on a solid and unambiguous foundation.

@@ -1,0 +1,160 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Backend Structure Document
+
+This document outlines the backend infrastructure for our desktop application that simplifies MCP server discovery, installation, and management. The backend is designed to be robust, scalable, and secure, ensuring a smooth experience for both technical and non-technical users.
+
+## 1. Backend Architecture
+
+Our backend is built with a service-oriented approach that leverages modern backend-as-a-service offerings and integrations. Key points:
+
+*   **Service Integration:**
+
+    *   **Supabase:** Provides our managed PostgreSQL database, real-time data handling, and serverless functions.
+    *   **Clerk Auth:** Handles user authentication and account management.
+    *   **OpenAI Integration (GPT-4o / Claude 3.5 Sonnet):** Analyzes user behavior and powers our recommendation engine.
+
+*   **Design Patterns:**
+
+    *   API-first approach to ensure clear communication between client-side and server-side components.
+    *   Modular design allowing independent updates and scalability of each service (user management, data storage, recommendations, etc.).
+
+*   **Scalability, Maintainability & Performance:**
+
+    *   The use of Supabase abstracts much of the complexity, allowing us to scale dynamically without traditional database management overhead.
+    *   Clear separation of concerns in our architecture means that user authentication, data storage, and AI recommendations can be updated independently.
+    *   Use of modern, lightweight frameworks ensures quick responses to user actions and efficient data management.
+
+## 2. Database Management
+
+Our data is managed through Supabase, which is built on top of PostgreSQL. The approach includes:
+
+*   **Database Technology:**
+
+    *   **SQL Database:** Specifically PostgreSQL hosted and managed by Supabase.
+
+*   **Data Storage & Structuring:**
+
+    *   Data is structured in tables for ease of querying and establishing relationships (e.g., users, MCP servers, reviews, and installation logs).
+    *   Real-time subscriptions allow the application to update key information dynamically.
+
+*   **Management Practices:**
+
+    *   Backups and monitoring are managed by Supabase.
+    *   Efficient indexing and query optimization ensure fast retrieval and manipulation of data.
+
+## 3. Database Schema
+
+The database schema is designed to clearly separate and relate our key entities. This is a human-readable overview along with sample SQL definitions:
+
+### Human Readable Overview:
+
+*   **Users Table:** Holds user account information, preferences, and syncing data if accounts are created via Clerk.
+*   **Servers Table:** Contains details about each MCP server including name, description, compatibility details, and version history.
+*   **Reviews Table:** Captures user reviews and ratings for each server.
+*   **Installation Logs Table:** Records data on installation attempts including error logs and retry counts.
+*   **Analytics Table:** Stores usage metrics that help us improve recommendations and track user interactions (if needed).
+
+### Sample SQL Schema (PostgreSQL):
+
+-- Users Table CREATE TABLE users ( id SERIAL PRIMARY KEY, username VARCHAR(100) UNIQUE NOT NULL, email VARCHAR(150) UNIQUE NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
+
+-- Servers Table CREATE TABLE servers ( id SERIAL PRIMARY KEY, name VARCHAR(200) NOT NULL, description TEXT, version_history TEXT, compatibility JSONB, release_notes TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
+
+-- Reviews Table CREATE TABLE reviews ( id SERIAL PRIMARY KEY, user_id INTEGER REFERENCES users(id), server_id INTEGER REFERENCES servers(id), rating INTEGER CHECK (rating BETWEEN 1 AND 5), comment TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
+
+-- Installation Logs Table CREATE TABLE installation_logs ( id SERIAL PRIMARY KEY, user_id INTEGER REFERENCES users(id), server_id INTEGER REFERENCES servers(id), status VARCHAR(50), -- e.g., 'success', 'failed' error_message TEXT, attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
+
+-- Analytics Table CREATE TABLE analytics ( id SERIAL PRIMARY KEY, user_action VARCHAR(100), details JSONB, recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
+
+## 4. API Design and Endpoints
+
+The backend communicates with the frontend through RESTful APIs designed for clarity and efficiency. Key details:
+
+*   **API Approach:**
+
+    *   RESTful endpoints that allow CRUD (Create, Read, Update, Delete) operations on key resources.
+
+*   **Key Endpoints Include:**
+
+    *   **/api/servers:** For retrieving a list of MCP servers, with options for filtering and searching.
+    *   **/api/servers/{id}:** For fetching details about a specific server, including version history and reviews.
+    *   **/api/users:** For user account management, including account creation, syncing preferences, and updates. (Integrated with Clerk Auth)
+    *   **/api/install:** For handling installation requests, managing automatic configuration, and error logging.
+    *   **/api/recommendations:** For pulling personalized server suggestions by interfacing with OpenAI-powered recommendation logic.
+    *   **/api/analytics:** For posting usage data to our privacy-focused analytics system.
+
+## 5. Hosting Solutions
+
+The backend is hosted on managed cloud services to ensure high availability and scalability:
+
+*   **Primary Hosting Platforms:**
+
+    *   **Supabase:** Provides both the hosting and management of our PostgreSQL database and backend functions.
+    *   **Clerk Auth:** Hosted externally for secure user authentication.
+
+*   **Benefits:**
+
+    *   Highly reliable and scalable cloud hosting solutions that adjust with demand.
+    *   Reduced operational overhead thanks to managed services and automatic scaling.
+    *   Cost-effective as resources are provisioned on-demand.
+
+## 6. Infrastructure Components
+
+Multiple infrastructure components work together to ensure a smooth experience:
+
+*   **Load Balancers:** Distribute incoming API requests evenly to ensure no single server gets overwhelmed.
+*   **Caching Mechanisms:** Temporary storage of frequently accessed data to reduce load times and database hits.
+*   **Content Delivery Networks (CDNs):** Although primarily a backend service, CDNs are used for static content delivery on related frontend components.
+*   **CI/CD Pipelines:** Automated testing and deployment pipelines are in place to ensure that new changes are safely deployed with minimal downtime.
+*   **Version Control:** Utilizing Git and GitHub to manage our codebase and facilitate collaboration.
+
+## 7. Security Measures
+
+The backend is built with a strong emphasis on security. Key aspects include:
+
+*   **Authentication and Authorization:**
+
+    *   **Clerk Auth:** Provides robust and secure user authentication, ensuring that only verified users have access to protected resources.
+    *   Role-based access control is implemented where needed.
+
+*   **Data Encryption & Privacy:**
+
+    *   All data transmissions use Secure Sockets Layer (SSL) encryption.
+    *   Sensitive user data is encrypted both in transit and at rest.
+
+*   **Additional Security Protocols:**
+
+    *   Regular security audits and adherence to best practices.
+    *   Detailed error handling to avoid exposing sensitive system information to end users.
+
+## 8. Monitoring and Maintenance
+
+Effective monitoring and continuous maintenance are essential for a reliable backend. Practices include:
+
+*   **Monitoring Tools:**
+
+    *   Tools integrated within Supabase for real-time logging and performance monitoring.
+    *   External services like Plausible or Matomo for tracking application usage and analytics.
+
+*   **Maintenance Strategies:**
+
+    *   Regular updates and patching of dependencies and services.
+    *   Automated backups and routine health checks.
+    *   CI/CD pipelines ensure seamless deployment of updates with minimal disruption.
+
+## 9. Conclusion and Overall Backend Summary
+
+In summary, the backend for our MCP server management application is designed to offer:
+
+*   **A Modern and Scalable Architecture:** Leveraging managed services such as Supabase and Clerk Auth to provide robust infrastructure while minimizing maintenance overhead.
+*   **Efficient Data Management:** With a well-structured PostgreSQL database optimized for performance and scalability.
+*   **Clear API Design:** Ensuring that both the desktop frontend and integrated services (like the OpenAI recommendation engine) communicate effectively and securely.
+*   **Strong Security and Monitoring:** Implementing comprehensive authentication, encryption, and regular system health monitoring to protect user data and maintain a high level of service.
+
+This integrated approach not only simplifies the backend setup but also ensures that the application can grow and adapt to user needs over time, aligning perfectly with our project's goal of making MCP server management accessible to all users.

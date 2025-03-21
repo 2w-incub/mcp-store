@@ -1,0 +1,114 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+## Project Overview
+
+*   **Type:** cursor_project_rules
+*   **Description:** I'm building a desktop application aimed at simplifying the discovery and installation of MCP (Model Context Protocol) servers. This app will enable users to browse, discover, and search for various MCP servers that enhance specific AI capabilities. The goal is to streamline the installation process, allowing users to directly install these servers into their preferred MCP client like Claude Desktop or Cursor with a single click, removing the need for manual JSON configuration edits or command line interventions.
+*   **Primary Goal:** Simplify the discovery and one-click installation of MCP servers into user-defined clients while providing a modern, intuitive, and robust user experience (as outlined in the PRD).
+
+## Project Structure
+
+### Framework-Specific Routing
+
+*   **Directory Rules:**
+
+    *   **Next js 14 (App Router):** Routes follow the `app/[route]/page.tsx` conventions. For example, the landing page is in `app/page.tsx` and authentication pages are nested within `app/auth/`.
+    *   Example 1: "Next.js 14 (App Router)" → `app/[route]/page.tsx` conventions
+    *   Example 2: "Next.js (Pages Router)" → `pages/[route].tsx` pattern
+    *   Example 3: "React Router 6" → `src/routes/` with `createBrowserRouter`
+
+### Core Directories
+
+*   **Versioned Structure:**
+
+    *   **app:** Contains the primary Next.js application structure including API routes (`app/api`), layouts (`app/layout.tsx`), and main pages (`app/page.tsx`).
+    *   Example 1: `app/api` → "Next.js 14 API routes with Route Handlers"
+    *   Example 2: `src/views` → "Vue 3 composition API components"
+
+### Key Files
+
+*   **Stack-Versioned Patterns:**
+
+    *   **app/dashboard/layout.tsx:** Implements the root layout for the dashboard, following Next.js 14 conventions.
+    *   **pages/_app.js:** Would be used in a Next.js Pages Router setup for global customization if not using the App Router.
+
+## Tech Stack Rules
+
+*   **Version Enforcement:**
+
+    *   **next@14:** App Router required; avoid using deprecated methods like `getInitialProps`.
+    *   **tailwindcss:** Must use Tailwind's slate color palette with accent elements in purple and the Inter font for consistency.
+    *   **typescript:** Enforce strict type checking and scalable module design.
+    *   **supabase:** Use for backend database operations with secure, versioned API calls.
+    *   **shadcn UI:** Follow component-driven design with a focus on reusability and consistency.
+    *   **clerk-auth:** Leverage built-in authentication methods for seamless user sign-in, sign-up, and account management.
+    *   **open ai:** Integrate for AI recommendations; ensure robust error handling and secure API integration.
+
+## PRD Compliance
+
+*   **Non-Negotiable:**
+
+    *   "This desktop application is designed to simplify the discovery and installation process for MCP (Model Context Protocol) servers by offering an intuitive, one-click solution." — All implementation must adhere to this mandate, ensuring an accessible and streamlined experience for both technical and non-technical users without manually editing configurations.
+
+## App Flow Integration
+
+*   **Stack-Aligned Flow:**
+
+    *   Example: "Next.js 14 Auth Flow → `app/auth/login/page.tsx` uses server actions". The authentication flow powered by Clerk should seamlessly integrate with the main dashboard and installation manager to provide a consistent user journey from sign-up to one-click server installations.
+
+## Best Practices
+
+*   **Next js**
+
+    *   Utilize the App Router with nested folder structures for clear route delineations.
+    *   Maintain separation of concerns between UI components and logic.
+    *   Use server actions for secure data fetching and form handling.
+
+*   **Tailwind CSS**
+
+    *   Adhere to a consistent design system using Tailwind's slate base and purple accents sparingly.
+    *   Utilize utility classes to maintain consistency and speed up styling.
+    *   Optimize responsiveness through meticulous breakpoints and mobile-first design.
+
+*   **Typescript**
+
+    *   Enforce strict type-checking and uniform coding standards.
+    *   Leverage interfaces and types for component props and API responses.
+    *   Integrate ESLint and Prettier to maintain code quality.
+
+*   **Supabase**
+
+    *   Secure API calls with proper authentication and error handling.
+    *   Use versioned schemas and migrations to keep database changes trackable.
+    *   Optimize queries for performance and scalability.
+
+*   **Shadcn UI**
+
+    *   Build reusable UI components following the design system guidelines.
+    *   Ensure consistency across components with preset Tailwind classes.
+    *   Test components in isolation to guarantee UI reliability.
+
+*   **Clerk Auth**
+
+    *   Implement robust authentication flows including sign in, sign up, and password recovery as per Clerk’s best practices.
+    *   Secure session data and manage user states efficiently.
+    *   Provide fallback mechanisms for authentication failures.
+
+*   **Open AI**
+
+    *   Handle API integrations with well-defined error states and fallbacks.
+    *   Secure API keys and sensitive data using environment variables.
+    *   Log and monitor AI-driven interactions for continuous improvement.
+
+## Rules
+
+*   Derive folder/file patterns **directly** from the techStackDoc versions provided in the starter kit documentation.
+*   If Next.js 14 App Router: Enforce the `app/` directory with nested route folders and avoid mixing with a `pages/` structure.
+*   If using a Pages Router: Use a flat `pages/*.tsx` structure but do not mix with the App Router patterns.
+*   Mirror this logic for other frameworks like React Router or SvelteKit, ensuring consistency in folder and file structures.
+*   Never mix version patterns (for example, do not include `pages/` in an App Router project).

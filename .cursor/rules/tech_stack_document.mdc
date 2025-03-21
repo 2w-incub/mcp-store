@@ -1,0 +1,74 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Tech Stack Document
+
+This document provides an overview of the technology choices made for our desktop application. Our goal is to simplify the discovery and installation of MCP servers, making it as user-friendly as possible for both technical and non-technical audiences. Below, we break down the technologies used in each layer of the project and explain how they contribute to a seamless, robust, and secure experience.
+
+## Frontend Technologies
+
+For the user interface and overall user experience, we have chosen modern web technologies that combine efficiency with visual appeal. These include:
+
+*   **Tauri**: This ensures our application is accessible across Windows, macOS, and Linux, by wrapping our web technologies into a reliable desktop application.
+*   **Next.js**: A popular framework built on React, Next.js provides server-side rendering and a fast, reactive interface—ensuring smooth navigation between screens such as the Home, Search, and Server Details pages.
+*   **Tailwind CSS**: Tailwind helps us create a clean and modern design easily. Our design uses Tailwind’s slate color as a base with subtle purple accents to highlight key elements, combined with the Inter font for clarity.
+*   **Typescript**: By using TypeScript, we ensure that our code is more predictable and less prone to errors. This enhances maintainability and improves overall performance of our application.
+*   **Shadcn UI**: These pre-built components allow us to quickly build a consistent and modern UI that adheres to our design guidelines.
+
+Together, these frontend technologies help create a powerful yet user-friendly interface that allows users to effortlessly browse, search for, and manage MCP servers.
+
+## Backend Technologies
+
+Supporting the frontend, our backend technologies ensure that data is managed securely and efficiently. Key choices include:
+
+*   **Supabase**: Acting as our database and backend-as-a-service platform, Supabase stores all information regarding MCP servers and user accounts. It provides reliable data management and a seamless experience when updating or retrieving data.
+*   **Clerk Auth**: By integrating Clerk for user authentication, we make it simple for users to sign up, sign in, and manage their accounts. This streamlines account synchronization and preference management without complicated configurations.
+*   **Open AI Integration (GPT-4o / Claude 3.5 Sonnet)**: These AI models are used to analyze user behavior and provide interactive, personalized recommendations. They take into account user interactions, browsing history, and preferences to suggest MCP servers that best match the user's needs.
+
+These backend components work together to support core functionalities such as server discovery, user account management, and personalized AI recommendations.
+
+## Infrastructure and Deployment
+
+To ensure that the application is reliable and easy to deploy, we use a modern set of infrastructure tools:
+
+*   **Hosting Platforms**: Our desktop application is built on Tauri, ensuring cross-platform compatibility. Additionally, services like Supabase handle backend hosting and database management.
+*   **CI/CD Pipelines**: Continuous Integration and Continuous Deployment pipelines are in place to make sure that whenever code is updated, it is automatically tested and deployed. This leads to faster, more reliable updates and improves overall stability.
+*   **Version Control**: Git and GitHub are used for source control, enabling easy collaboration, version tracking, and rollback if needed.
+
+These choices lead to a system that is not only scalable and robust but also facilitates quick iteration and improved maintenance over time.
+
+## Third-Party Integrations
+
+Several third-party services are integrated into our solution to further enhance functionality and ease of use:
+
+*   **Clerk Auth** is integrated for managing secure user authentication and account management.
+*   **Open AI (GPT-4o / Claude 3.5 Sonnet)** is utilized to drive the AI-powered recommendation engine that tailors MCP server suggestions based on user activity.
+*   **Analytics Tools (Plausible or Matomo)** provide insights on user interactions. These privacy-focused tools help us understand which parts of the application are most used and identify areas for improvement.
+
+These integrations improve the user experience by enabling personalized recommendations, robust security, and actionable insights into application performance and usage.
+
+## Security and Performance Considerations
+
+Building a smooth and secure user experience is our top priority. We have implemented several measures to address both security and performance:
+
+*   **Robust Authentication**: Clerk Auth ensures that user credentials are securely managed, while still allowing use of the app even when not signed in.
+*   **Data Protection and Encryption**: Sensitive data, such as user credentials and server configurations, is securely handled and protected using industry-standard encryption methods.
+*   **Error Handling and Logging**: Built-in error messaging, automated retry mechanisms, and detailed logging keep users informed of any installation issues or connection problems, promoting transparency and reliability.
+*   **Performance Optimizations**: The use of Next.js with server-side rendering and static site generation, along with the lightweight and responsive Tailwind CSS framework, ensures that the application loads quickly and runs efficiently.
+
+These strategies ensure that the application is both secure in its handling of sensitive information and optimized for performance, providing a seamless experience for users.
+
+## Conclusion and Overall Tech Stack Summary
+
+Our technology choices have been carefully selected to balance ease of use, strong performance, and robust security—all key to making the discovery and installation of MCP servers as straightforward as possible.
+
+*   **Frontend**: Tauri, Next.js, Tailwind CSS, Typescript, and Shadcn UI work together to provide a modern, responsive, and visually compelling user interface.
+*   **Backend**: Supabase, Clerk Auth, and powerful AI integration (using GPT-4o or Claude 3.5 Sonnet) manage data, authentication, and personalized recommendations.
+*   **Infrastructure**: Solid CI/CD processes, hosting solutions, and version control systems contribute to the reliable, scalable deployment of the application.
+*   **Third-Party Tools**: External integrations like Clerk for authentication and Plausible or Matomo for analytics enhance overall functionality and user insight.
+
+In summary, this carefully chosen tech stack ensures that our application is accessible, secure, and efficient, meeting the needs of both technical professionals and non-technical users. The design and architecture not only streamline the discovery and installation process of MCP servers but also provide a scalable foundation for future growth and additional features.
